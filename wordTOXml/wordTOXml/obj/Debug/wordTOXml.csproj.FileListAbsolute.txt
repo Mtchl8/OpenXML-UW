@@ -10,3 +10,15 @@ C:\Users\mishka\Desktop\UpWork\wordTOXml\wordTOXml\obj\Debug\wordTOXml.exe
 C:\Users\mishka\Desktop\UpWork\wordTOXml\wordTOXml\obj\Debug\wordTOXml.pdb
 C:\Users\mishka\Desktop\UpWork\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csproj.CopyComplete
 C:\Users\mishka\Desktop\UpWork\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csprojAssemblyReference.cache
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\bin\Debug\wordTOXml.exe.config
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\bin\Debug\wordTOXml.exe
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\bin\Debug\wordTOXml.pdb
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csprojAssemblyReference.cache
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csproj.ResolveComReference.cache
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.Form1.resources
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.Properties.Resources.resources
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csproj.GenerateResource.cache
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csproj.CoreCompileInputs.cache
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.csproj.CopyComplete
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.exe
+C:\Users\mishka\Desktop\UpWork\OpenXML-task\wordTOXml\wordTOXml\obj\Debug\wordTOXml.pdb

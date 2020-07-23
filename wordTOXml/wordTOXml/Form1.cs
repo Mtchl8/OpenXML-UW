@@ -13,14 +13,6 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
 
-using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using A = DocumentFormat.OpenXml.Drawing;
-using Wps = DocumentFormat.OpenXml.Office2010.Word.DrawingShape;
-using V = DocumentFormat.OpenXml.Vml;
-
-
-
-
 
 namespace wordTOXml
 {
@@ -88,6 +80,7 @@ namespace wordTOXml
             doc.Close();
             appWord.Quit(false);
         }
+        
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -118,124 +111,147 @@ namespace wordTOXml
                     int h = Convert.ToInt32(h1);
                     height = Convert.ToUInt32(h);
 
-                    //shape
-                    shape.HorizontalAlignment = DocumentFormat.OpenXml.Vml.Office.HorizontalRuleAlignmentValues.Center;
+                    string attributes = shape.Style.Value;
+                    var map = attributes
+                      .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Distinct()
+                      .Select(x => x.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries))
+                      .ToDictionary(p => p[0], p => p[1]);
+
+                    map["margin-left"] = "0";
+                    map["margin-right"] = "0";
+                    map["margin-top"] = "0";
+                    map["margin-bottom"] = "0";
+                    //map["auto-size"] = "0";
+
+                    //map["left-padding"] = "0";
+                    //map["right-padding"] = "0";
+                    //map["top-padding"] = "0";
+                    //map["bottom-padding"] = "0";
+
+                    shape.Style.Value =
+                        string.Join(";", from pair in map
+                                         select pair.Key + ":" + pair.Value);
+
+                    shape.InsetMode = DocumentFormat.OpenXml.Vml.Office.InsetMarginValues.Custom;
+                    OpenXmlElementList lst =  shape.ChildElements;
+                    OpenXmlElementList textboxchilds = lst.First().ChildElements;
+
+                    foreach (var cc in resultDoc.ContentControls())
+                    {
+
+                        DocumentFormat.OpenXml.Wordprocessing.Table table1 = new DocumentFormat.OpenXml.Wordprocessing.Table();
+
+                        TableProperties tableProperties1 = new TableProperties();
+                        DocumentFormat.OpenXml.Wordprocessing.TableStyle tableStyle1 = new DocumentFormat.OpenXml.Wordprocessing.TableStyle() { Val = "ad" };
+                        BiDiVisual biDiVisual1 = new BiDiVisual();
+                        TableWidth tableWidth1 = new TableWidth() { Width = "5200", Type = TableWidthUnitValues.Pct };
+                        TableJustification tableJustification1 = new TableJustification() { Val = TableRowAlignmentValues.Center };
+
+                        TableCellMarginDefault tableCellMarginDefault1 = new TableCellMarginDefault();
+                        TableCellLeftMargin tableCellLeftMargin1 = new TableCellLeftMargin() { Width = 0, Type = TableWidthValues.Dxa };
+                        TableCellRightMargin tableCellRightMargin1 = new TableCellRightMargin() { Width = 0, Type = TableWidthValues.Dxa };
 
 
+                        tableCellMarginDefault1.Append(tableCellLeftMargin1);
+                        tableCellMarginDefault1.Append(tableCellRightMargin1);
+                        TableLook tableLook1 = new TableLook() { Val = "04A0" };
+
+
+                        tableProperties1.Append(tableStyle1);
+                        tableProperties1.Append(biDiVisual1);
+                        tableProperties1.Append(tableWidth1);
+                        tableProperties1.Append(tableJustification1);
+                        tableProperties1.Append(tableCellMarginDefault1);
+                        tableProperties1.Append(tableLook1);
+
+
+                        TableGrid tableGrid1 = new TableGrid();
+                        GridColumn gridColumn1 = new GridColumn() { Width = "555" };
+                        GridColumn gridColumn2 = new GridColumn() { Width = "556" };
+
+
+                        tableGrid1.Append(gridColumn1);
+                        tableGrid1.Append(gridColumn2);
+
+                        TableRow tableRow1 = new TableRow() { RsidTableRowAddition = "00AE49FD", RsidTableRowProperties = "00AE49FD" };
+
+                        TableRowProperties tableRowProperties1 = new TableRowProperties();
+                        TableRowHeight tableRowHeight1 = new TableRowHeight() { Val = 200, HeightType = HeightRuleValues.Exact };
+
+                        TableJustification tableJustification2 = new TableJustification() { Val = TableRowAlignmentValues.Center };
+
+                        tableRowProperties1.Append(tableRowHeight1);
+                        tableRowProperties1.Append(tableJustification2);
+
+                        TableCell tableCell1 = new TableCell();
+
+                        TableCellProperties tableCellProperties1 = new TableCellProperties();
+                        TableCellWidth tableCellWidth1 = new TableCellWidth() { Width = "100", Type = TableWidthUnitValues.Pct };
+                        //tableCell1.TableCellProperties.TableCellMargin.BottomMargin = new BottomMargin() { Width = "0" };
+                        //tableCell1.TableCellProperties.TableCellMargin.TopMargin = new TopMargin() { Width = "0" };
+                        TableCellVerticalAlignment tableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Top };
+                        tableCellProperties1.Append(tableCellWidth1, tableCellVerticalAlignment);
+
+                        DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph2 = new DocumentFormat.OpenXml.Wordprocessing.Paragraph() { RsidParagraphAddition = "00AE49FD", RsidParagraphProperties = "00AE49FD", RsidRunAdditionDefault = "00AE49FD" };
+
+                        ParagraphProperties paragraphProperties2 = new ParagraphProperties();
+                        Justification justification1 = new Justification() { Val = JustificationValues.Right };
+
+                        ParagraphMarkRunProperties paragraphMarkRunProperties2 = new ParagraphMarkRunProperties();
+                        RightToLeftText rightToLeftText2 = new RightToLeftText();
+
+                        paragraphMarkRunProperties2.Append(rightToLeftText2);
+
+                        paragraphProperties2.Append(justification1);
+                        paragraphProperties2.Append(paragraphMarkRunProperties2);
+
+                        paragraph2.Append(paragraphProperties2);
+
+                        tableCell1.Append(tableCellProperties1);
+                        tableCell1.Append(paragraph2);
+
+                        TableCell tableCell2 = new TableCell();
+
+                        TableCellProperties tableCellProperties2 = new TableCellProperties();
+                        TableCellWidth tableCellWidth2 = new TableCellWidth() { Width = "100", Type = TableWidthUnitValues.Pct };
+                        //tableCell2.TableCellProperties.TableCellMargin.BottomMargin = new BottomMargin() { Width = "0" };
+                        //tableCell2.TableCellProperties.TableCellMargin.TopMargin = new TopMargin() { Width = "0" };
+                        TableCellVerticalAlignment tableCellVerticalAlignment1 = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Bottom };
+
+                        tableCellProperties2.Append(tableCellWidth2);
+                        tableCellProperties2.Append(tableCellVerticalAlignment1);
+
+                        DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph3 = new DocumentFormat.OpenXml.Wordprocessing.Paragraph() { RsidParagraphAddition = "00AE49FD", RsidParagraphProperties = "00AE49FD", RsidRunAdditionDefault = "00AE49FD" };
+
+                        ParagraphProperties paragraphProperties3 = new ParagraphProperties();
+                        Justification justification2 = new Justification() { Val = JustificationValues.Left };
+
+                        ParagraphMarkRunProperties paragraphMarkRunProperties3 = new ParagraphMarkRunProperties();
+                        RightToLeftText rightToLeftText3 = new RightToLeftText();
+
+                        paragraphMarkRunProperties3.Append(rightToLeftText3);
+
+                        paragraphProperties3.Append(justification2);
+                        paragraphProperties3.Append(paragraphMarkRunProperties3);
+
+                        paragraph3.Append(paragraphProperties3);
+
+                        tableCell2.Append(tableCellProperties2);
+                        tableCell2.Append(paragraph3);
+
+                        tableRow1.Append(tableRowProperties1);
+                        tableRow1.Append(tableCell1);
+                        tableRow1.Append(tableCell2);
+
+                        table1.Append(tableProperties1);
+                        table1.Append(tableGrid1);
+                        table1.Append(tableRow1);
+
+                        cc.InnerXml = "<w:tbl>" + table1.InnerXml + "</w:tbl>";
+                        //cc.PrependChild(table1);                        //cc.Append(table1);
+                    }
                 }
 
-                foreach (var cc in resultDoc.ContentControls())
-                {
-                    DocumentFormat.OpenXml.Wordprocessing.Table table1 = new DocumentFormat.OpenXml.Wordprocessing.Table();
-
-                    TableProperties tableProperties1 = new TableProperties();
-                    DocumentFormat.OpenXml.Wordprocessing.TableStyle tableStyle1 = new DocumentFormat.OpenXml.Wordprocessing.TableStyle() { Val = "ad" };
-                    BiDiVisual biDiVisual1 = new BiDiVisual();
-                    TableWidth tableWidth1 = new TableWidth() { Width = "5200", Type = TableWidthUnitValues.Pct };
-                    TableJustification tableJustification1 = new TableJustification() { Val = TableRowAlignmentValues.Center };
-
-                    TableCellMarginDefault tableCellMarginDefault1 = new TableCellMarginDefault();
-                    TableCellLeftMargin tableCellLeftMargin1 = new TableCellLeftMargin() { Width = 0, Type = TableWidthValues.Dxa };
-                    TableCellRightMargin tableCellRightMargin1 = new TableCellRightMargin() { Width = 0, Type = TableWidthValues.Dxa };
-                    
-
-                    tableCellMarginDefault1.Append(tableCellLeftMargin1);
-                    tableCellMarginDefault1.Append(tableCellRightMargin1);
-                    TableLook tableLook1 = new TableLook() { Val = "04A0" };
-
-
-                    tableProperties1.Append(tableStyle1);
-                    tableProperties1.Append(biDiVisual1);
-                    tableProperties1.Append(tableWidth1);
-                    tableProperties1.Append(tableJustification1);
-                    tableProperties1.Append(tableCellMarginDefault1);
-                    tableProperties1.Append(tableLook1);
-
-
-                    TableGrid tableGrid1 = new TableGrid();
-                    GridColumn gridColumn1 = new GridColumn() { Width = "555" };
-                    GridColumn gridColumn2 = new GridColumn() { Width = "556" };
-
-
-                    tableGrid1.Append(gridColumn1);
-                    tableGrid1.Append(gridColumn2);
-
-                    TableRow tableRow1 = new TableRow() { RsidTableRowAddition = "00AE49FD", RsidTableRowProperties = "00AE49FD" };
-
-                    TableRowProperties tableRowProperties1 = new TableRowProperties();
-                    TableRowHeight tableRowHeight1 = new TableRowHeight() { Val = 200, HeightType = HeightRuleValues.Exact };
-                   
-                    TableJustification tableJustification2 = new TableJustification() { Val = TableRowAlignmentValues.Center };
-
-                    tableRowProperties1.Append(tableRowHeight1);
-                    tableRowProperties1.Append(tableJustification2);
-
-                    TableCell tableCell1 = new TableCell();
-
-                    TableCellProperties tableCellProperties1 = new TableCellProperties();
-                    TableCellWidth tableCellWidth1 = new TableCellWidth() { Width = "100", Type = TableWidthUnitValues.Pct };
-                    //tableCell1.TableCellProperties.TableCellMargin.BottomMargin = new BottomMargin() { Width = "0" };
-                    //tableCell1.TableCellProperties.TableCellMargin.TopMargin = new TopMargin() { Width = "0" };
-                    TableCellVerticalAlignment tableCellVerticalAlignment = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Top };
-                    tableCellProperties1.Append(tableCellWidth1, tableCellVerticalAlignment);
-
-                    DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph2 = new DocumentFormat.OpenXml.Wordprocessing.Paragraph() { RsidParagraphAddition = "00AE49FD", RsidParagraphProperties = "00AE49FD", RsidRunAdditionDefault = "00AE49FD" };
-
-                    ParagraphProperties paragraphProperties2 = new ParagraphProperties();
-                    Justification justification1 = new Justification() { Val = JustificationValues.Right };
-
-                    ParagraphMarkRunProperties paragraphMarkRunProperties2 = new ParagraphMarkRunProperties();
-                    RightToLeftText rightToLeftText2 = new RightToLeftText();
-
-                    paragraphMarkRunProperties2.Append(rightToLeftText2);
-
-                    paragraphProperties2.Append(justification1);
-                    paragraphProperties2.Append(paragraphMarkRunProperties2);
-
-                    paragraph2.Append(paragraphProperties2);
-
-                    tableCell1.Append(tableCellProperties1);
-                    tableCell1.Append(paragraph2);
-
-                    TableCell tableCell2 = new TableCell();
-
-                    TableCellProperties tableCellProperties2 = new TableCellProperties();
-                    TableCellWidth tableCellWidth2 = new TableCellWidth() { Width = "100", Type = TableWidthUnitValues.Pct };
-                    //tableCell2.TableCellProperties.TableCellMargin.BottomMargin = new BottomMargin() { Width = "0" };
-                    //tableCell2.TableCellProperties.TableCellMargin.TopMargin = new TopMargin() { Width = "0" };
-                    TableCellVerticalAlignment tableCellVerticalAlignment1 = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Bottom };
-
-                    tableCellProperties2.Append(tableCellWidth2);
-                    tableCellProperties2.Append(tableCellVerticalAlignment1);
-
-                    DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph3 = new DocumentFormat.OpenXml.Wordprocessing.Paragraph() { RsidParagraphAddition = "00AE49FD", RsidParagraphProperties = "00AE49FD", RsidRunAdditionDefault = "00AE49FD" };
-
-                    ParagraphProperties paragraphProperties3 = new ParagraphProperties();
-                    Justification justification2 = new Justification() { Val = JustificationValues.Left };
-
-                    ParagraphMarkRunProperties paragraphMarkRunProperties3 = new ParagraphMarkRunProperties();
-                    RightToLeftText rightToLeftText3 = new RightToLeftText();
-
-                    paragraphMarkRunProperties3.Append(rightToLeftText3);
-
-                    paragraphProperties3.Append(justification2);
-                    paragraphProperties3.Append(paragraphMarkRunProperties3);
-
-                    paragraph3.Append(paragraphProperties3);
-
-                    tableCell2.Append(tableCellProperties2);
-                    tableCell2.Append(paragraph3);
-
-                    tableRow1.Append(tableRowProperties1);
-                    tableRow1.Append(tableCell1);
-                    tableRow1.Append(tableCell2);
-
-                    table1.Append(tableProperties1);
-                    table1.Append(tableGrid1);
-                    table1.Append(tableRow1);
-
-                    cc.AppendChild(table1);
-                }
 
             }
 
